@@ -240,24 +240,6 @@
     </nav>
 
     <script>
-        function activateVoiceAssistant() {
-            document.getElementById('voiceAssistantModal').style.display = 'flex';
-            startListening();
-        }
-
-        function closeVoiceAssistant() {
-            document.getElementById('voiceAssistantModal').style.display = 'none';
-        }
-
-        function startListening() {
-            const transcriptText = document.getElementById('transcriptText');
-            transcriptText.innerText = 'Listening...';
-
-            setTimeout(() => {
-                transcriptText.innerText = 'How can I assist you?';
-            }, 3000);
-        }
-
         const apiKey = 'ed2443a8defa4ec599c140041241110';
         const apiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=auto:ip`;
 
@@ -278,6 +260,6 @@
             })
             .catch(error => console.error('Error fetching weather data:', error));
     </script>
-    <audio autoplay loop src="resources/storm.mp3"></audio>
+    <script src="voice.js"></script>
 </body>
 </html>
