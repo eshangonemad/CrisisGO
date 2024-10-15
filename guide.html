@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrisisGo</title>
+    <style>
+        @font-face {
+            font-family: 'Sani';
+            src: url('resources/prdtsans.ttf');
+        }
+        body {
+            margin: 0;
+            font-family: Sani;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            box-sizing: border-box;
+        }
+
+        nav {
+            width: 100%;
+            height: 60px;
+            background: #112130;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding-left: 20px;
+            position: fixed; 
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            height: 80px;
+            box-sizing: border-box;
+            bottom: 0;
+        }
+
+        .home {
+            width: 100%;
+            height: 25vh;
+            background-color: azure;
+            box-sizing: border-box;
+            background-image: url('resources/CTA.png');
+            background-size: cover;
+        }
+
+        book {
+            width: 90%;
+            height: 17vh;
+            background-color: rgb(31, 31, 31);
+            box-sizing: border-box;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between; 
+            border-radius: 6px;
+            margin: 3vh auto;
+            align-items: center; 
+        }
+
+        .rght {
+            height: 100%;
+            width: 7%;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+
+        .itea {
+            height: 100%;
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            align-items: flex-start;
+            line-height: 1.5;
+            margin: 15px;
+        }
+
+        .itea h3 {
+            margin: 0;
+            padding-bottom: 10px; 
+        }
+
+        .itea p {
+            margin: 0;
+        }
+
+        .center {
+            width: 70px;
+            height: 70px;
+            background-color: #ff821a;
+            border-radius: 50%;
+            position: relative;
+            top: -20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .item-nav {
+            text-align: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            flex: 1;
+            z-index: 2;
+        }
+
+        .voice {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 8, 8, 0.596);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
+
+        .mid {
+            width: 80%;
+            height: 50%;
+            background-color: #282c34;
+            box-shadow: 0 4px 8px 0 rgba(167, 166, 166, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .mic-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff821a;
+            animation: pulse 1.5s infinite ease-in-out;
+            margin: 30px auto;
+            margin-top: 60px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0.7);
+            }
+            70% {
+                transform: scale(1.2);
+                box-shadow: 0 0 25px 25px rgba(255, 130, 26, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0);
+            }
+        }
+
+        .transcript {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="voice">
+        <div class="mid">
+            <button class="close-btn" onclick="closeVoiceAssistant()">X</button>
+            <h1>Voice Assistant</h1>
+            <div class="mic-circle"></div>
+            <div class="transcript" id="transcriptText">Listening...</div> 
+        </div>
+    </div>
+
+    <div class="guide">
+        <iframe width="100%" height="1070" src="https://rss.app/embed/v1/list/qpQVZEfCm6fdHC94" frameborder="0"></iframe>
+    </div>
+
+    <nav>
+        <div class="item-nav" onclick="window.open('index.html','_self')"><img src="resources/home.png" width="35px"></div>
+        <div class="center" onclick="activateVoiceAssistant()">
+            <img src="resources/microphone.png" width="40px">
+        </div>
+        <div class="item-nav" onclick="window.open('medivault.html','_self')"><img src="resources/safe.png" width="35px"></div>
+    </nav>
+    <script>
+        function activateVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'flex';
+            startVoiceRecognition();
+        }
+
+        function closeVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'none';
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+        recognition.continuous = false;
+
+        const transcriptText = document.getElementById('transcriptText');
+
+        recognition.onstart = function () {
+            transcriptText.textContent = "Listening...";
+        };
+
+        recognition.onresult = function (event) {
+            let interimTranscript = "";
+            for (let i = 0; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                interimTranscript += transcript;
+            }
+            transcriptText.textContent = interimTranscript;
+        };
+
+        recognition.onend = function () {
+            let finalText = transcriptText.textContent;
+            transcriptText.textContent = "Click the microphone to start again.";
+            giveResponse(finalText);
+        };
+
+        function startVoiceRecognition() {
+            recognition.start();
+        }
+
+        function giveResponse(inputText) {
+            let responseText = getResponseText(inputText);
+            const speechSynthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(responseText);
+            speechSynthesis.speak(utterance);
+            pageOpener(inputText);
+        }
+
+        function pageOpener(inputText) {
+            if (inputText.toLowerCase().includes("weather")) {
+                window.open('weather.html', '_self');
+            } else if (inputText.toLowerCase().includes("sos")) {
+                window.open('SOS.html', '_self');
+            } else if (inputText.toLowerCase().includes("medivault")) {
+                window.open('medivault.html', '_self');
+            } else if (inputText.toLowerCase().includes("news")) {
+                window.open('guide.html', '_self');
+            } else if (inputText.toLowerCase().includes("home")) {
+                window.open('index.html', '_self');
+            } else if (inputText.toLowerCase().includes("natural disaster")) {
+                window.open('guide.html', '_self');
+            } else if (inputText.toLowerCase().includes("medical documents")) {
+                window.open('medivault.html', '_self');
+            } else if (inputText.toLowerCase().includes("i am in danger")) {
+                window.open('sos.html', '_self');
+            } else if (inputText.toLowerCase().includes("save me")) {
+                window.open('sos.html', '_self');
+            } else {
+                console.log("No matching page for input.");
+            }
+        }
+
+        function getResponseText(inputText) {
+            if (inputText.toLowerCase().includes("weather")) {
+                return "Opening weather page.";
+            } else if (inputText.toLowerCase().includes("sos")) {
+                return "Taking you to the SOS page.";
+            } else if (inputText.toLowerCase().includes("medivault")) {
+                return "Opening MediVault.";
+            } else if (inputText.toLowerCase().includes("news")) {
+                return "Opening news updates.";
+            } else if (inputText.toLowerCase().includes("home")) {
+                return "Going back to home.";
+            } else if (inputText.toLowerCase().includes("natural disaster")) {
+                return "Opening disaster information.";
+            } else if (inputText.toLowerCase().includes("medical documents")) {
+                return "Opening your medical documents.";
+            } else if (inputText.toLowerCase().includes("i am in danger")) {
+                return "Sending an SOS signal.";
+            } else if (inputText.toLowerCase().includes("save me")) {
+                return "Sending an SOS signal.";
+            } else {
+                return "I did not understand that.";
+            }
+        }
+    </script>
+</body>
+</html>

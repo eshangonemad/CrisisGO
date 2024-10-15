@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediVault</title>
+    <style>
+        @font-face {
+            font-family: 'Sani';
+            src: url('resources/prdtsans.ttf');
+        }
+
+        body {
+            margin: 0;
+            font-family: Sani;
+            width: 100%;
+            height: 100%;
+            background-color:#000000;
+            box-sizing: border-box;
+            color: #ffffff;
+        }
+
+        nav {
+            width: 100%;
+            height: 60px;
+            background: #112130;
+            color: white;
+            padding-left: 20px;
+            position: fixed;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            height: 80px;
+            box-sizing: border-box;
+            bottom: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .file-card {
+            margin-inline: 15px;
+            margin-block: 5px;
+            width: 100%;
+            height: 100px;
+            background-color: #282c34;
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            transition: transform 0.3s;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .file-card:hover {
+            transform: scale(1.05);
+        }
+
+        .file-actions { 
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background-color: #ff821a;
+            border: none;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #ff4500;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+
+        .img {
+            height: 100%;
+            width: 5%;
+            margin-right: 60px; 
+        }
+
+        .upload-section {
+            text-align: center;
+            padding: 30px;
+            background-color: #112130;
+            margin: 0;
+            border-radius: 0 0 15px 15px;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            background-color: #ff821a;
+            border: none;
+            padding: 10px 10px;
+            color: white;
+            font-size: 16px;
+            border-radius: 0 0 10px 10px;
+            cursor: pointer;
+        }
+
+        .upload-btn:hover {
+            background-color: #ff4500;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        h1 {
+            line-height: 0px;
+        }
+
+        h2 {
+            line-height: 0px;
+            margin-top: -10px;
+        }
+
+        .center {
+            width: 70px;
+            height: 70px;
+            background-color: #ff821a;
+            border-radius: 50%;
+            position: relative;
+            top: -20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .item-nav {
+            text-align: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            flex: 1;
+            z-index: 2;
+        }
+
+        .voice {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 8, 8, 0.596);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
+
+        .mid {
+            width: 80%;
+            height: 50%;
+            background-color: #282c34;
+            box-shadow: 0 4px 8px 0 rgba(167, 166, 166, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .mic-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff821a;
+            animation: pulse 1.5s infinite ease-in-out;
+            margin: 30px auto;
+            margin-top: 60px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0.7);
+            }
+            70% {
+                transform: scale(1.2);
+                box-shadow: 0 0 25px 25px rgba(255, 130, 26, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0);
+            }
+        }
+
+        .transcript {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <div class="voice">
+        <div class="mid">
+            <button class="close-btn" onclick="closeVoiceAssistant()">X</button>
+            <h1>Voice Assistant</h1>
+            <div class="mic-circle"></div>
+            <div class="transcript" id="transcriptText">Listening...</div>
+        </div>
+    </div>
+
+    <div class="upload-section">
+        <h1 style="font-size:30px;margin-top: 10px;">MediVault</h1>
+        <p style="font-size:15px;">Save all your medical data here for emergencies</p><br>
+        <label for="file-upload" class="upload-btn">Upload File</label>
+        <input type="file" id="file-upload" accept=".pdf,.jpg,.png,.docx">
+    </div>
+
+    <div class="container" id="file-container">
+    </div>
+
+    <nav>
+        <div class="item-nav" onclick="window.open('index.html','_self')"><img src="resources/home.png" width="35px"></div>
+        <div class="center" onclick="activateVoiceAssistant()">
+            <img src="resources/microphone.png" width="40px">
+        </div>
+        <div class="item-nav" onclick="window.open('medivault.html','_self')"><img src="resources/safe.png" width="35px"></div>
+    </nav>
+<script>
+        let files = JSON.parse(localStorage.getItem('mediVaultFiles')) || [];
+
+        document.getElementById('file-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = function(e) {
+                    const fileData = {
+                        name: file.name,
+                        url: e.target.result
+                    };
+                    files.push(fileData);
+                    localStorage.setItem('mediVaultFiles', JSON.stringify(files));
+                    displayFiles();
+                };
+                fileReader.readAsDataURL(file);
+            }
+        });
+
+        function displayFiles() {
+            const container = document.getElementById('file-container');
+            container.innerHTML = '';
+            files.forEach((file, index) => {
+                const fileCard = document.createElement('div');
+                fileCard.className = 'file-card';
+                fileCard.innerHTML = `
+  <div class='img'>
+    <img src="resources/file.png" height="100%">
+  </div>
+  <div class='willy'>
+    <h1>${file.name}</h1>
+      <button class="action-btn" onclick="renameFile(${index})">Rename</button>
+      <button class="action-btn" onclick="downloadFile(${index})">Download</button>
+  </div>`;
+                container.appendChild(fileCard);
+            });
+        }
+
+        function renameFile(index) {
+            const newName = prompt("Enter new file name:", files[index].name);
+            if (newName) {
+                files[index].name = newName;
+                localStorage.setItem('mediVaultFiles', JSON.stringify(files));
+                displayFiles();
+            }
+        }
+
+        function downloadFile(index) {
+            const link = document.createElement('a');
+            link.href = files[index].url;
+            link.download = files[index].name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function activateVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'flex';
+            const transcriptText = document.getElementById('transcriptText');
+            transcriptText.innerText = "Listening...";
+        }
+
+        function closeVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'none';
+        }
+
+        displayFiles();
+    </script>
+</body>
+</html>

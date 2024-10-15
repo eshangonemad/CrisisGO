@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrisisGo - Weather & Voice Assistant</title>
+    <style>
+        @font-face {
+            font-family: 'Sani';
+            src: url('resources/prdtsans.ttf');
+        }
+        body {
+            margin: 0;
+            font-family: Sani;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            box-sizing: border-box;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav {
+            width: 100%;
+            height: 60px;
+            background: #112130;
+            color: white;
+            padding-left: 20px;
+            position: fixed;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            height: 80px;
+            box-sizing: border-box;
+            bottom: 0;
+        }
+
+        .center {
+            width: 70px;
+            height: 70px;
+            background-color: #ff821a;
+            border-radius: 50%;
+            position: relative;
+            top: -20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .item-nav {
+            text-align: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            flex: 1;
+            z-index: 2;
+        }
+
+        .voice {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 8, 8, 0.596);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
+
+        .mid {
+            width: 80%;
+            height: 50%;
+            background-color: #282c34;
+            box-shadow: 0 4px 8px 0 rgba(167, 166, 166, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .mic-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff821a;
+            animation: pulse 1.5s infinite ease-in-out;
+            margin: 30px auto;
+            margin-top: 60px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0.7);
+            }
+            70% {
+                transform: scale(1.2);
+                box-shadow: 0 0 25px 25px rgba(255, 130, 26, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0);
+            }
+        }
+
+        .transcript {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+        }
+
+        .weather-card {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .weather-card h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .weather-card .icon {
+            width: 100px;
+            height: 100px;
+        }
+
+        .weather-data {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .weather-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .weather-item img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .temp {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .label {
+            font-size: 0.8em;
+            color: #ccc;
+        }
+
+        .info-box {
+            background-color: #ff821a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .home {
+            width: 100%;
+            height: 23vh;
+            background-color: azure;
+            box-sizing: border-box;
+            background-image: url('resources/CTA.png');
+            background-size: cover;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="voice" id="voiceAssistantModal">
+        <div class="mid">
+            <button class="close-btn" onclick="closeVoiceAssistant()">X</button>
+            <h1>Voice Assistant</h1>
+            <div class="mic-circle"></div>
+            <div class="transcript" id="transcriptText">Listening...</div>
+        </div>
+    </div>
+
+    <div class="home"></div>
+    <div class="weather-card">
+        <h2 id="location">Location</h2>
+        <img id="weatherIcon" class="icon" src="" alt="Weather Icon">
+        <div class="temp" id="temperature">-- °C</div>
+        <p class="label" id="description">Description</p>
+
+        <div class="weather-data">
+            <div class="weather-item">
+                <img src="resources/wind.png" alt="Wind Icon">
+                <div class="info-box" id="wind">-- km/h</div>
+                <p class="label">Wind</p>
+            </div>
+            <div class="weather-item">
+                <img src="resources/humidity.png" alt="Humidity Icon">
+                <div class="info-box" id="humidity">--%</div>
+                <p class="label">Humidity</p>
+            </div>
+            <div class="weather-item">
+                <img src="resources/gauge.png" alt="Pressure Icon">
+                <div class="info-box" id="pressure">-- hPa</div>
+                <p class="label">Pressure</p>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="item-nav" onclick="window.open('index.html','_self')"><img src="resources/home.png" width="35px"></div>
+        <div class="center" onclick="activateVoiceAssistant()">
+            <img src="resources/microphone.png" width="40px">
+        </div>
+        <div class="item-nav" onclick="window.open('medivault.html','_self')"><img src="resources/safe.png" width="35px"></div>
+    </nav>
+
+    <script>
+        function activateVoiceAssistant() {
+            document.getElementById('voiceAssistantModal').style.display = 'flex';
+            startListening();
+        }
+
+        function closeVoiceAssistant() {
+            document.getElementById('voiceAssistantModal').style.display = 'none';
+        }
+
+        function startListening() {
+            const transcriptText = document.getElementById('transcriptText');
+            transcriptText.innerText = 'Listening...';
+
+            setTimeout(() => {
+                transcriptText.innerText = 'How can I assist you?';
+            }, 3000);
+        }
+
+        const apiKey = 'ed2443a8defa4ec599c140041241110';
+        const apiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=auto:ip`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const weather = data.current;
+                const location = data.location;
+
+                document.getElementById('location').innerText = `${location.name}, ${location.region}`;
+                document.getElementById('temperature').innerText = `${Math.round(weather.temp_c)} °C`;
+                document.getElementById('description').innerText = weather.condition.text;
+
+                document.getElementById('weatherIcon').src = `https:${weather.condition.icon}`;
+                document.getElementById('wind').innerText = `${weather.wind_kph} km/h`;
+                document.getElementById('humidity').innerText = `${weather.humidity}%`;
+                document.getElementById('pressure').innerText = `${weather.pressure_mb} hPa`;
+            })
+            .catch(error => console.error('Error fetching weather data:', error));
+    </script>
+    <audio autoplay loop src="resources/storm.mp3"></audio>
+</body>
+</html>

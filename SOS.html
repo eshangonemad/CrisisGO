@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrisisGo</title>
+    <style>
+        @font-face {
+            font-family: 'Sani';
+            src: url('resources/prdtsans.ttf');
+        }
+        body {
+            margin: 0;
+            font-family: Sani;
+            padding: 15px;
+            width: 100%;
+            height: 100%;
+            background-color:#000000;
+            box-sizing: border-box;
+        }
+
+        nav {
+            width: 100%;
+            height: 60px;
+            background: #112130;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding-left: 20px;
+            position: fixed; 
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            height: 80px;
+            box-sizing: border-box;
+            bottom: 0;
+            margin-left: -15px;
+        }
+
+        .home {
+            width: 100%;
+            height: 25vh;
+            background-color: azure;
+            box-sizing: border-box;
+            background-image: url('resources/CTA.png');
+            background-size: cover;
+        }
+
+        book {
+            width: 90%;
+            height: 17vh;
+            background-color: rgb(31, 31, 31);
+            box-sizing: border-box;
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between; 
+            border-radius: 6px;
+            margin: 3vh auto;
+            align-items: center; 
+        }
+
+        .rght {
+            height: 100%;
+            width: 7%;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+
+        .itea {
+            height: 100%;
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            align-items: flex-start;
+            line-height: 1.5;
+            margin: 15px;
+        }
+
+        .itea h3 {
+            margin: 0;
+            padding-bottom: 10px; 
+        }
+
+        .itea p {
+            margin: 0;
+        }
+
+        .center {
+            width: 70px;
+            height: 70px;
+            background-color: #ff821a;
+            border-radius: 50%;
+            position: relative;
+            top: -20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .item-nav {
+            text-align: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            flex: 1;
+            z-index: 2;
+        }
+
+        .voice {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 8, 8, 0.596);
+            backdrop-filter: blur(2px);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
+
+        .mid {
+            width: 80%;
+            height: 50%;
+            background-color: #282c34;
+            box-shadow: 0 4px 8px 0 rgba(167, 166, 166, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .mic-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff821a;
+            animation: pulse 1.5s infinite ease-in-out;
+            margin: 30px auto;
+            margin-top: 60px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0.7);
+            }
+            70% {
+                transform: scale(1.2);
+                box-shadow: 0 0 25px 25px rgba(255, 130, 26, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 130, 26, 0);
+            }
+        }
+
+        .transcript {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+        }
+        
+        .guide {
+            width: 100%;
+            height: 65vh; 
+            padding: 15px;
+            box-sizing: border-box;
+            align-items: center;
+            position: absolute; 
+            top: 0;
+            left: 0;
+            z-index: -1; 
+        }
+
+        #map {
+            width: 100%;
+            height: 90%; 
+            border-radius: 10px 10px 0 0;
+            box-sizing: border-box;
+            z-index: 0; 
+        }
+
+        .SOSI {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff3d4a;
+            display: flex;
+            justify-content: center;
+            margin:  auto;
+            margin-block:10px;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .boxi {
+            width: 100%;
+            height: 10vh;
+            padding: 5px;
+            border-radius: 0 0 10px 10px;
+            background-color: #2e2e2e;
+            box-sizing: border-box;
+            padding-left: 7px;
+        }
+
+        .btns {
+            border: none;
+            background-color: #fd5757;
+            height: 100%;
+            width: 49%;
+            font-family: sani;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <div class="voice">
+        <div class="mid">
+            <button class="close-btn" onclick="closeVoiceAssistant()">X</button>
+            <h1>Voice Assistant</h1>
+            <div class="mic-circle"></div>
+            <div class="transcript" id="transcriptText">Listening...</div>
+        </div>
+    </div>
+    <div class="guide">
+        <div id="map"></div>
+        <div class="boxi">
+            <button style="border-radius: 10px 0 0 10px;" onclick="setStatus('AMBULANCE')"  id="Ambu" class="btns">Ambulance</button>
+            <button style="border-radius: 0 10px 10px 0;" onclick="setStatus('FIRETRUCK')" id="Firu" class="btns">FireTruck</button>
+        </div>
+        <div class="SOSI" onclick="sendSOS()"><img src="resources/asterisk.png" width="50px"></div>
+    </div>
+    <nav>
+        <div class="item-nav" onclick="window.open('index.html','_self')"><img src="resources/home.png" width="35px"></div>
+        <div class="center" onclick="activateVoiceAssistant()">
+            <img src="resources/microphone.png" width="40px">
+        </div>
+        <div class="item-nav" onclick="window.open('medivault.html','_self')"><img src="resources/safe.png" width="35px"></div>
+    </nav>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let status = '';
+
+        function setStatus(newStatus) {
+            status = newStatus;
+            alert(`${status} selected.`);
+        }
+
+        function sendSOS() {
+            if (status) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const userLocation = `${position.coords.latitude},${position.coords.longitude}`;
+                        const url = `emergency.html?location=${userLocation}&status=${encodeURIComponent(status)}`;
+                        window.open(url, '_self');
+                    }, function () {
+                        alert('Geolocation failed. Please enable location services.');
+                    });
+                } else {
+                    alert('Your browser does not support geolocation.');
+                }
+            } else {
+                alert('Please select an emergency service before sending SOS.');
+            }
+        }
+
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLocation = [position.coords.latitude, position.coords.longitude];
+                    const map = L.map('map').setView(userLocation, 15);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                    }).addTo(map);
+                    L.marker(userLocation).addTo(map).bindPopup('You are here!').openPopup();
+                }, function () {
+                    alert('Geolocation failed. Please enable location services.');
+                });
+            } else {
+                alert('Your browser does not support geolocation.');
+            }
+        }
+
+        window.onload = initMap;
+
+        function activateVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'flex';
+            document.getElementById('transcriptText').innerText = 'Listening...'; 
+        }
+
+        function closeVoiceAssistant() {
+            document.querySelector('.voice').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
